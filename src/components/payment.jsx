@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
+import {loadStripe} from '@stripe/stripe-js';
+import {Elements, CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
 import axios from 'axios';
 
-function Payment() {
+const stripePRomise = loadStripe('your publishable key here');
+
+function CheckoutForm() {
     // functional components that handle a basic payment form
-    const [amount, setAmount] = useState('');
-    const [reference, setReference] = useState('');
-    const [email, setEmail] = useState('');
-    const [paymentUrl, setPaymentUrl] = useState(''); //redirect url to payment gateway
-    const [error, setError] = useState(''); //error message if request fails 
+    const stripe = useStripe();
+    const elements = useElements();
+    const [message, setMessage] = useState(null);
 
     //handles form submission and calls the back end 
-    const handlePayment = async (e) => {
+    const handleSubmit = async (e) => {
         try{
             setError(null);
             
